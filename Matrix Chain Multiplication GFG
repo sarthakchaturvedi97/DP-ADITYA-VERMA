@@ -1,0 +1,33 @@
+class Solution{
+public:
+    int getAns(int arr[],int **dp,int i,int j)
+    {
+        if(i>=j)
+        return 0;
+        
+        if(dp[i][j]!=-1)
+        return dp[i][j];
+        
+        int mn=INT_MAX;
+        for(int k=i;k<j;k++)
+        {
+            int ans=getAns(arr,dp,i,k)+getAns(arr,dp,k+1,j)+arr[i-1]*arr[k]*arr[j];
+            mn=min(ans,mn);
+        }
+        return dp[i][j]=mn;
+    }
+    int matrixMultiplication(int N, int arr[])
+    {
+        // code here
+        int **dp=new int *[N+1];
+        for(int i=0;i<=N;i++)
+        dp[i]=new int[N+1];
+        
+        for(int i=0;i<=N;i++)
+        {
+            for(int j=0;j<=N;j++)
+            dp[i][j]=-1;
+        }
+        return getAns(arr,dp,1,N-1);
+    }
+};
