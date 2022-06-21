@@ -1,0 +1,67 @@
+class Solution{
+public:
+    bool isPalindrome(string str,int i,int j)
+    {
+        if(i>=j)
+        return true;
+        
+        while(i<=j)
+        {
+            if(str[i]!=str[j])
+            return false;
+            
+            i++;
+            j--;
+        }
+        return true;
+    }
+    int getAns(string str,int **dp,int i,int j)
+    {
+        if(i>=j)
+        return 0;
+        
+        if(isPalindrome(str,i,j))
+        return 0;
+        
+        if(dp[i][j]!=-1)
+        return dp[i][j];
+        
+        int mncut=INT_MAX;
+        for(int k=i;k<j;k++)
+        {
+            int left,right;
+            
+            if(dp[i][k]!=-1)
+            left=dp[i][k];
+            else
+            left=getAns(str,dp,i,k);
+            
+            if(dp[k+1][j]!=-1)
+            right=dp[k+1][j];
+            else
+            right=getAns(str,dp,k+1,j);
+            
+            int cut=1+left+right;
+            mncut=min(cut,mncut);
+        }
+        return dp[i][j]=mncut;
+    }
+    int palindromicPartition(string str)
+    {
+        // code here
+        int len=str.length();
+        int **dp=new int *[len+1];
+        for(int i=0;i<=len;i++)
+        dp[i]=new int[len+1];
+        
+        for(int i=0;i<=len;i++)
+        {
+            for(int j=0;j<=len;j++)
+            {
+                dp[i][j]=-1;
+            }
+        }
+        
+        return getAns(str,dp,0,len-1);
+    }
+};
